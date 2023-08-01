@@ -8,106 +8,22 @@
 <link rel="stylesheet" href="ProductListSeller.css">
 
 <style>
-       /* Style the menu button */
-       .menu-btn {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 2;
-      padding: 10px;
-      background-color: #333;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    /* Style the menu container */
-    .menu-container {
-      position: fixed;
-      top: 50px;
-      right: 10px;
-      width: 300px;
-      height: 400px;
-      overflow-y: scroll;
-      background-color: #f1f1f1;
-      z-index: 1;
-      display: none;
-    }
-
-    .menu-items-container {
-      position: fixed;
-      top: 450px;
-      right: 10px;
-      background-color: #f1f1f1;
-      z-index: 1;
-      display: none;
-    }
-
-    /* Show the menu container when the button is clicked */
-    .menu-container.show {
-      display: block;
-    }
-
-    /* Style the menu items */
-    .menu-item {
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-      position: relative;
-    }
-    /* Style the quantity counter */
-.quantity-counter {
-  position: absolute;
-  top: 0;
-  right: 50px;
-  padding: 2px 6px;
-  background-color: #333;
-  color: #fff;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 50%;
+    .status.canceled {
+  color: #a92b2b;
+  background-color: rgba(157, 89, 89, 0.2);
 }
-
-/* Style the quantity buttons */
-.quantity-btn {
-  position: absolute;
-  top: 0;
-  padding: 2px 6px;
-  background-color: #333;
-  color: #fff;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 50%;
-  cursor: pointer;
+.status.canceled:before {
+  background-color: #a92b2b;
 }
-
-/* Style the plus button */
-.plus-btn {
-  right: 70px;
+.status.completed {
+  color: #59719d;
+  background-color: rgba(89, 113, 157, 0.2);
 }
-
-/* Style the minus button */
-.minus-btn {
-  right: 110px;
+.status.completed:before {
+  background-color: #59719d;
 }
-
-/* Style the delete button */
-.delete-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 2px 6px;
-  background-color: #f00;
-  color: #fff;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.menu-items-container.show {
-      display: block;
-    }
-
 </style>
+
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -139,8 +55,8 @@
       </li>
       <li class="sidebar-list-item">
         <a href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
-          <span>Inbox</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>Orders</span>
         </a>
       </li>
       <li class="sidebar-list-item">
@@ -171,9 +87,34 @@
         </svg>
       </button>
       <!-- <button class="app-content-headerButton">Edit</button> -->
-      <button class="app-content-headerButton" onclick="toggleMenu()"><span>Cart</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-    </button>
+        <button type="button" class="app-content-headerButton" data-bs-toggle="modal" data-bs-target="#myModal">Add Product</button>
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="form-label required">Name</label>
+                                <input type="text" class="form-control" id="pname" name="pname">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">id</label>
+                                <input type="number" class="form-control" id="merchid" name="merchid">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary" id="save" name="save" value="save">Submit</button>
+                              <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     
 
     </div>
@@ -207,13 +148,6 @@
             </div>
           </div>
         </div>
-        <div class="menu-container" id="menu-container">
-       <!--  <button class="fixed-btn" onclick="saveOrder()">Save Order</button> -->
-  </div>
-  <div class="menu-items-container" id="menu-items-container">
-  <button class="app-content-headerButton" onclick="saveOrder()">Save Order</button>
-  </div>
-  
         <button class="action-button list active" title="List View">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         </button>
@@ -236,45 +170,61 @@
         <div class="product-cell status-cell">Status<button class="sort-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z"/></svg>
           </button></div>
-       
+        <div class="product-cell stock">Stock<button class="sort-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z"/></svg>
+          </button></div>
         <div class="product-cell price">Price<button class="sort-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z"/></svg>
           </button></div>
-         
         
 
       </div>
       
         <?php
-        $id = $_GET['item'];
-        $conn = mysqli_connect('localhost','root','','erdb');
+        $conn = mysqli_connect('localhost','root','','testt');
         if(!$conn) {
             echo "Error";
             die($conn);
         }
         else{
-            $sql = mysqli_query($conn,"SELECT * FROM `products` WHERE merchid = $id");
+            $sql = mysqli_query($conn,"SELECT * FROM `orders`");
             
                         while ($row = $sql->fetch_assoc()) {
                             if (!empty($row)) {
-                                ?>
-                                
-                               
+                                echo '
                                 <div class="products-row">
           <div class="product-cell image">
             <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="product">
-            <span> <?php echo $row["pname"];?> </span>
+            <span>'.$row["name"].'</span>
           </div>
         <div class="product-cell category"><span class="cell-label">Category:</span>Furniture</div>
         <div class="product-cell status-cell">
           <span class="cell-label">Status:</span>
-          <span class="status active">Active</span>
+          ';
+          $status=$row['status'];
+          $active='active';
+          $completed='completed';
+          $canceled='canceled';
+
+          if($status==$active)
+          {
+            echo '<span class="status active">Active</span>';
+          }
+          elseif($status==$completed)
+          {
+            echo '<span class="status completed">Completed</span>';
+          }
+          else
+          {
+            echo '<span class="status canceled">Canceled</span>';
+          }
+          echo '
         </div>
+        <div class="product-cell stock"><span class="cell-label">Stock:</span>36</div>
         <div class="product-cell price"><span class="cell-label">Price:</span>$560</div>
-        <div class="add-product"><button class="app-content-headerButton" onclick="addItem(' <?php echo $row['pname'] ?> ')">ADD</button></div>
-      
       </div>
-      <?php     
+      
+      ';
                                
                             }
                           }
@@ -283,7 +233,7 @@
         echo "ERROR";
     }
     else{
-        echo "<script>console.log('success');</script>";
+        echo "Success";
     }
                       }
                      
@@ -295,116 +245,6 @@
  
 </body>
 <script  src="ProductListSeller.js"></script>
-<script>
-    var menu = document.getElementById("main-menu");
-var menuContainer = document.getElementById("menu-container");
-/* var menuItemsContainer = document.getElementById("menu-items-container"); */
-    var itemCounts = {};
-function toggleMenu() {
-      var menu = document.getElementById("menu-container");
-      var menuItemsContainer = document.getElementById("menu-items-container");
-      menu.classList.toggle("show");
-      menuItemsContainer.classList.toggle("show");
-    }
-
-    function addItem(item) {
-  if (!itemCounts[item]) {
-    itemCounts[item] = 1;
-
-    var menuItem = document.createElement("div");
-    menuItem.className = "menu-item";
-    menuItem.textContent = item;
-    menuContainer.appendChild(menuItem);
-
-    var quantityCounter = document.createElement("div");
-    quantityCounter.className = "quantity-counter";
-    quantityCounter.textContent = "1";
-    menuItem.appendChild(quantityCounter);
-
-    var plusButton = document.createElement("div");
-    plusButton.className = "quantity-btn plus-btn";
-    plusButton.textContent = "+";
-    menuItem.appendChild(plusButton);
-
-    var minusButton = document.createElement("div");
-    minusButton.className = "quantity-btn minus-btn";
-    minusButton.textContent = "-";
-    menuItem.appendChild(minusButton);
-
-    var deleteButton = document.createElement("div");
-    deleteButton.className = "delete-btn";
-    deleteButton.textContent = "x";
-    menuItem.appendChild(deleteButton);
-
-    plusButton.addEventListener('click', function() {
-      var count = parseInt(quantityCounter.textContent);
-      count++;
-      quantityCounter.textContent = count.toString();
-    });
-
-    minusButton.addEventListener('click', function() {
-      var count = parseInt(quantityCounter.textContent);
-      if (count > 0) {
-        count--;
-        quantityCounter.textContent = count.toString();
-      }
-    });
-
-    deleteButton.addEventListener('click', function() {
-      menuItem.parentNode.removeChild(menuItem);
-      delete itemCounts[item];
-    });
-  } else {
-    itemCounts[item]++;
-    var menuItem = getMenuItemsByName(item)[0];
-    menuItem.querySelector('.quantity-counter').textContent = itemCounts[item].toString();
-  }
-    }
-
-    function getMenuItemsByName(name) {
-  return Array.from(menuContainer.querySelectorAll('.menu-item')).filterby(function(menuItem) {
-    return menuItem.textContent === name;
-  });
-}
-
-
-function saveOrder() {
-  var menuItems = document.querySelectorAll('.menu-item');
-  var orderItems = [];
-
-  // Loop through each menu item and extract the details
-  for (var i = 0; i < menuItems.length; i++) {
-    var menuItem = menuItems[i];
-    var name = menuItem.textContent;
-    var quantity = menuItem.querySelector('.quantity-counter').textContent;
-
-    // Add the details to the orderItems array
-    orderItems.push({
-      name: name,
-      quantity: quantity
-    });
-  }
-
-  // Send the order data to the server using AJAX
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/Marketplace/PHP/AddtoOrders.php');
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      console.log('Order saved successfully!');
-    } else {
-      console.log('Error saving order!');
-    }
-  };
-  xhr.send(JSON.stringify(orderItems));
-
-  menuContainer.innerHTML = "";
-  itemCounts = {};
-}
-
-
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </html>
 <?php
