@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 31, 2023 at 04:55 PM
+-- Generation Time: Aug 09, 2023 at 01:52 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -84,7 +84,21 @@ INSERT INTO `orders` (`name`, `quantity`, `status`) VALUES
 (' Cream 1+-x', 1, 'completed'),
 (' carrot 10+-x', 10, 'completed'),
 (' Cucumber 6+-x', 6, 'completed'),
-(' carrot 1+-x', 1, 'completed');
+(' carrot 1+-x', 1, 'completed'),
+(' Cabbage 1+-x', 1, 'completed'),
+('\n      \n        \n        \n      \n    \n        \n   ', 1, 'completed'),
+('\n      \n        \n        \n      \n    \n        \n   ', 3, 'completed'),
+('\n          \n             Cabbage\n          \n      ', 2, 'completed'),
+('\n          \n             Orange\n          \n       ', 4, 'completed'),
+('\n          \n             Cabbage\n          \n      ', 3, 'completed'),
+('\n          \n             Orange\n          \n       ', 13, 'completed'),
+('\n          \n             Orange\n          \n       ', 2, 'completed'),
+('\n          \n             Cabbage\n          \n      ', 5, 'completed'),
+('\n          \n             Orange\n          \n       ', 5, 'completed'),
+('\n          \n             Orange\n          \n       ', 1, 'completed'),
+('\n          \n             Orange\n          \n       ', 4, 'completed'),
+('\n          \n             Orange\n          \n       ', 1, 'completed'),
+('\n          \n             Cabbage\n          \n      ', 6, 'completed');
 
 -- --------------------------------------------------------
 

@@ -214,7 +214,7 @@
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </button>
-            <button class="remove-button">Remove</button>
+        
           </div>
           
         </div>
