@@ -181,7 +181,7 @@
       </div>
       
         <?php
-        $conn = mysqli_connect('localhost','root','','testt');
+        $conn = mysqli_connect('localhost','root','','erdb');
         if(!$conn) {
             echo "Error";
             die($conn);
@@ -194,7 +194,7 @@
                                 echo '
                                 <div class="products-row">
           <div class="product-cell image">
-            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="product">
+            <img src="" alt="product">
             <span>'.$row["name"].'</span>
           </div>
         <div class="product-cell category"><span class="cell-label">Category:</span>Furniture</div>

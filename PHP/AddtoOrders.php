@@ -6,7 +6,7 @@ $orderData = json_decode(file_get_contents('php://input'), true);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "testt";
+$dbname = "erdb";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
