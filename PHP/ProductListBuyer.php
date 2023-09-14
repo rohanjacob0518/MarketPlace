@@ -30,7 +30,7 @@
           <span>Products</span>
           </a>
           </li>
-          <li class="sidebar-list-item">
+          <!-- <li class="sidebar-list-item">
           <a href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
           <span>Statistics</span>
@@ -47,7 +47,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span>Notifications</span>
           </a>
-          </li>
+          </li> -->
         </ul>
       <div class="account-info">
         <div class="account-info-picture">
@@ -121,14 +121,14 @@
         </div>
         <div class="products-area-wrapper gridView">
           <?php
-            $id = $_GET['item'];
+            
             $conn = mysqli_connect('localhost','root','','erdb');
             if(!$conn) {
               echo "Error";
               die($conn);
             }
             else{
-              $sql = mysqli_query($conn,"SELECT * FROM `products` WHERE merchid = $id");  
+              $sql = mysqli_query($conn,"SELECT * FROM `products` ");  
               while ($row = $sql->fetch_assoc()) {
                 if (!empty($row)) {
           ?>
@@ -149,7 +149,7 @@
             <div class="product-cell price">
               <span class="cell-label">
                 Price:
-              </span>$560
+              </span>₹560
             </div>
             <div class="add-product">
               <button class="app-content-headerButton" onclick="addItem(' <?php echo $row['pname'];?>','<?php echo $row['image'];?> ')">
@@ -201,6 +201,7 @@
         <div class="product-list-itemContent">
           <div class="product-info">
             <h2 class="product-info-header">${item}</h2>
+            <h7 class="remove-product"><button>remove</button></h7>
           </div>
           <div class="product-amount-wrapper">
             <button class="product-amount-button increase">
@@ -222,16 +223,26 @@
       const productList = document.querySelector(".product-list");
       productList.appendChild(productListItem);
 
-   /*    var deleteButton = document.createElement("div");
-    deleteButton.className = "delete-btn";
-    deleteButton.textContent = "x";
-    menuItem.appendChild(deleteButton);
-
-    deleteButton.addEventListener('click', function() {
-      menuItem.parentNode.removeChild(menuItem);
+    var deleteButton = document.querySelectorAll(".remove-product");
+    deleteButton.forEach(function (button) {
+  button.addEventListener('click', function() {
+    // Find the parent product-item element and remove it
+    var productItem = button.closest(".product-list-item");
+    if (productItem && productList.contains(productItem)) {
+      productList.removeChild(productItem);
       delete itemCounts[item];
+      console.log('Product deleted');
+    }
+  });
+});
+    /* deleteButton.addEventListener('click', function() {
+      var closestitm=deleteButton.closest(".product-list-item")
+      productList.removeChild(closestitm);
+      delete itemCounts[item];
+      console.log('deleted');
 
     }); */
+    
 
   } else {
     itemCounts[item]++;
@@ -239,6 +250,7 @@
     menuItem.querySelector('.quantity-counter').textContent = itemCounts[item].toString();
   }
 }
+
 
 const productList = document.querySelector(".product-list");
 productList.addEventListener("click", function (event) {
@@ -251,7 +263,7 @@ productList.addEventListener("click", function (event) {
   if (button.classList.contains("increase")) {
     productAmount++;
   } else if (button.classList.contains("decrease")) {
-    productAmount = Math.max(productAmount - 1, 0);
+    productAmount = Math.max(productAmount - 1, 1);
   }
 
   productAmountElement.textContent = productAmount;
@@ -269,7 +281,7 @@ productList.addEventListener("click", function (event) {
       // Loop through each menu item and extract the details
       for (var i = 0; i < menuItems.length; i++) {
         var menuItem = menuItems[i];
-        var name = menuItem.textContent;
+        var name = menuItem.querySelector('.product-info-header').textContent;
         var quantity = menuItem.querySelector('.product-amount').textContent;
         // Add the details to the orderItems array
         orderItems.push({
@@ -293,11 +305,30 @@ productList.addEventListener("click", function (event) {
       menuContainer.innerHTML = "";
       itemCounts = {};
     }
-    var modeSwitch = document.querySelector('.mode-switch');
+/*     var modeSwitch = document.querySelector('.mode-switch');
     modeSwitch.addEventListener('click', function () {                      
       document.documentElement.classList.toggle('light');
       modeSwitch.classList.toggle('active');
-    });
+    }); */
+
+
+    function setThemeFromSystem(e) {
+  if (e.matches) {
+      // The user's system prefers dark mode
+      //give code for dark mode 
+      document.documentElement.classList.remove('light');
+  } else {
+      // The user's system prefers light mode
+      document.documentElement.classList.toggle('light');
+  }
+}
+
+// Initialize theme based on system preference
+setThemeFromSystem(window.matchMedia('(prefers-color-scheme: dark)'));
+
+// Listen for changes in system preference
+window.matchMedia('(prefers-color-scheme: dark)').addListener(setThemeFromSystem);
+
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
   <style>
@@ -475,6 +506,11 @@ productList.addEventListener("click", function (event) {
   height: auto;
 }
 
+.remove-product {
+  color: #fff;
+  font-size: 12px;
+}
+
 .product-info-header {
   color: #fff;
   margin: 0 0 8px 0;
@@ -499,6 +535,5 @@ productList.addEventListener("click", function (event) {
 </style>
 
   
-
 
 
