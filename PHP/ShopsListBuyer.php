@@ -8,6 +8,11 @@
   <link rel="stylesheet" href="ProductListBuyer.css">
 </head>
 <body>
+<?php
+session_start();
+  $uid=$_SESSION['uid'];
+?>
+  
 <!-- partial:index.partial.html -->
 <div class="app-container">
   <div class="sidebar">
@@ -17,19 +22,19 @@
       </div>
     </div>
     <ul class="sidebar-list">
-      <li class="sidebar-list-item">
+      <li class="sidebar-list-item active">
         <a href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span>Home</span>
         </a>
       </li>
-      <li class="sidebar-list-item active">
+      <li class="sidebar-list-item">
         <a href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span>Shops</span>
         </a>
       </li>
-      <li class="sidebar-list-item">
+      <!-- <li class="sidebar-list-item">
         <a href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
           <span>Statistics</span>
@@ -46,7 +51,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span>Notifications</span>
         </a>
-      </li>
+      </li> -->
     </ul>
     <div class="account-info">
       <div class="account-info-picture">
@@ -73,7 +78,7 @@
       <input class="search-bar" placeholder="Search..." type="text">
       <div class="app-content-actions-wrapper">
         <div class="filter-button-wrapper">
-          <button class="action-button filter jsFilter"><span>Filter</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+          <!-- <button class="action-button filter jsFilter"><span>Filter</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button> -->
           <div class="filter-menu">
             <label>Category</label>
             <select>
@@ -104,13 +109,24 @@
     <div class="products-area-wrapper gridView">
         <?php
         $conn = mysqli_connect('localhost','root','','erdb');
+        $rowselec = "SELECT * FROM users WHERE id='$uid'";
+        $retval6 = mysqli_query($conn, $rowselec);
         if(!$conn) {
             echo "Error";
             die($conn);
         }
         else{
-            $reflat= 9.5916;
-            $reflong= 76.5222;
+            if($retval6)
+            {
+                $row8 = mysqli_fetch_array($retval6);
+                if ($row8) 
+                {
+                  $reflat=$row8['ulat'];
+                  $reflong=$row8['ulong'];
+                }
+            }
+            if($reflat)
+            {
             //$reflat =$_POST['reflat'];
 
             function haversineDistance($lat1, $lon1, $lat2, $lon2) {
@@ -141,24 +157,32 @@
                                 <div class="products-row">
                                 <a href="#" style="text-decoration:none" onclick="shopSelect(' <?php echo $location['id'] ?> ')">
           <div class="product-cell image">
-            <img src="" alt="shops">
+            <img src="<?php echo $location['img'] ?>" alt="shops">
             <span> <?php echo $location['name'];?> </span>
           </div>
         <div class="product-cell category"><span class="cell-label">Category:</span><?php echo $location['Category'] ?></div>
-        <div class="product-cell distance"><span class="cell-label">Distance:</span><?php echo $location['id'] ?></div>
+        <!-- <div class="product-cell distance"><span class="cell-label">Distance:</span><?php echo $location['id'] ?></div> -->
               </a>
       </div>
       <?php     
                                
                             }
-                          }
-                          if(!$sql)
+                            if(!$sql)
     {
         echo "ERROR";
     }
     else{
         echo "<script>console.log('success');</script>";
     }
+                          }
+                          else
+                          {
+                            ?>
+                             <button type="button" class="app-content-headerButton" data-bs-toggle="modal" data-bs-target="#myModal" onclick="window.open('maptest4.html')">ADD ADDRESS</button>
+                            <?php
+                          }
+                        }
+                          
                       
                      
                      ?>
@@ -177,7 +201,7 @@
 
         var url = "/Marketplace/PHP/ProductListBuyer.php?item=" +item.toString();;
 
-        window.open(url, "_blank");
+        window.open(url,"_self");
 
     }
 
