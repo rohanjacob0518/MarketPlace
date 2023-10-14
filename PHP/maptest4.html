@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Address Selection</title>
+    <style>
+     
+      .sb-title {
+        position: relative;
+        top: -12px;
+        font-family: Roboto, sans-serif;
+        font-weight: 500;
+      }
+
+      /* .sb-title-icon {
+        position: relative;
+        top: -5px;
+      } */
+
+      .card-container {
+        display: flex;
+        height: 600px;
+        width: 1500px;
+      }
+
+      .panel {
+        background: white;
+        width: 300px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+
+      .half-input-container {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .half-input {
+        max-width: 100px;
+      }
+
+      .map {
+        width: 100%;
+        position: relative;
+        left: -180px;
+        top: 2ch;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: Roboto, sans-serif;
+      }
+
+      input {
+        height: 30px;
+      }
+
+      input {
+        border: 0;
+        border-bottom: 1px solid black;
+        font-size: 14px;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+      }
+
+      input:focus::placeholder {
+        color: white;
+      }
+
+      #map {
+        width: 70%;
+        height: 600px;
+        position: relative;
+        left: -180px;
+        top: 2ch;
+      }
+
+      .button-cta {
+        position: absolute;
+        top: 520px; /* Adjust the top position as needed */
+        left: 520px; /* Adjust the left position as needed */
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        z-index: 2; /* Ensure the button appears above the map */
+      }
+    </style>
+    <script>
+      navigator.geolocation.getCurrentPosition(showPosition);
+      
+      function showPosition(position) {
+              var lats= position.coords.latitude;
+              var longit= position.coords.longitude;
+              window.initMap = initMap(lats,longit);
+      }
+
+      function initMap(lats,longit) {
+
+        var clickedLatitude; 
+        var clickedLongitude;
+
+        const CONFIGURATION = {
+            "ctaTitle": "AddressGet",
+        "mapOptions": {"center":{"lat":lats,"lng":longit},"fullscreenControl":false,"mapTypeControl":false,"streetViewControl":false,"zoom":11,"zoomControl":true,"maxZoom":22},
+        "mapsApiKey": "AIzaSyDh2X_xILaFLflYxsCbA3AgZRZzl89zVN0",
+        "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":true,"ctaControl":true}
+        };
+
+        const map = new google.maps.Map(document.getElementById("gmp-map"), {
+          zoom: CONFIGURATION.mapOptions.zoom,
+          center: CONFIGURATION.mapOptions.center,
+          mapTypeControl: false,
+          fullscreenControl: CONFIGURATION.mapOptions.fullscreenControl,
+          zoomControl: CONFIGURATION.mapOptions.zoomControl,
+          streetViewControl: CONFIGURATION.mapOptions.streetViewControl,
+        });
+
+        const marker = new google.maps.Marker();
+        marker.setMap(map);
+
+        // Add a click event listener to the map
+        map.addListener("click", function (event) {
+          const clickedLocation = event.latLng;
+          clickedLatitude = clickedLocation.lat();
+          clickedLongitude = clickedLocation.lng();
+          marker.setPosition(clickedLocation);
+        
+
+          // Reverse geocode to get the address information
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ location: clickedLocation }, function (results, status) {
+            if (status === "OK") {
+              if (results[0]) {
+                fillInAddress(results[0]);
+              } else {
+                window.alert("No address found for this location");
+              }
+            } else {
+              window.alert("Geocoder failed due to: " + status);
+            }
+          });
+        });
+
+        function fillInAddress(place) {
+          // Extract address components and fill in your form fields as needed
+          // For example:
+          const streetNumber = place.address_components.find((component) =>
+            component.types.includes("street_number")
+          );
+          const route = place.address_components.find((component) =>
+            component.types.includes("route")
+          );
+          const locality = place.address_components.find((component) =>
+            component.types.includes("locality")
+          );
+          
+          const country = place.address_components.find((component) =>
+            component.types.includes("country")
+          );
+
+          // Fill in your form fields as needed
+          // For example:
+          document.getElementById("location-input").value =
+            (streetNumber ? streetNumber.long_name + " " : "") +
+            (route ? route.long_name : "");
+          document.getElementById("locality-input").value =
+            locality ? locality.long_name : "";
+        //  document.getElementById("administrative_area_level_1-input").value =
+          document.getElementById("clickedLatitude").value =
+          clickedLatitude ? clickedLatitude : "";
+            //administrativeArea ? administrativeArea.short_name : "";
+          document.getElementById("clickedLongitude").value =
+            clickedLongitude ? clickedLongitude : "";
+          document.getElementById("country-input").value =
+            country ? country.long_name : "";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <img class="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="">
+            <!-- <span class="sb-title">Address Selection</span> -->
+            <H2>Address Selection</H2>
+    <div class="card-container">
+      <div class="panel">
+        <div>
+            
+          </div>
+          <input type="hidden" placeholder="Address" id="location-input"/>
+        
+          <input type="hidden" placeholder="City" id="locality-input"/>
+          <div class="half-input-container">
+            <form action="LocationFetch.php" method="post">
+            <input type="hidden" class="half-input" placeholder="State/Province" id="clickedLatitude" name="clickedLatitude"/>
+            <input type="hidden" class="half-input" placeholder="State/Province" id="clickedLongitude" name="clickedLongitude"/>
+           
+          </div>
+          <input type="hidden" placeholder="Country" id="country-input"/>
+          <div class=".button-container" id="mao">
+            <button class="button-cta" type="submit" value="submit">Submit</button>
+          </div>
+          
+          </form>
+      </div><br><br>
+      <div class="map" id="gmp-map">
+        Hello
+      </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh2X_xILaFLflYxsCbA3AgZRZzl89zVN0&libraries=places&callback=initMap" async defer ></script>
+  </body>
+</html>
