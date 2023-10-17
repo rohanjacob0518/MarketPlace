@@ -9,7 +9,7 @@ body{
 	font-size: 15px;
 	line-height: 1.7;
 	color: #c4c3ca;
-	background-color: #101827;
+	background-color: #f7f8fa;
 	overflow-x: hidden;
 }
 a {
@@ -72,7 +72,7 @@ h6 span{
   height: 36px;
   border-radius: 50%;
   color: #ffffff;
-  background-color: #102770;
+  background-color: #93B1A6;
   font-family: 'unicons';
   content: '\eb4f';
   z-index: 20;
@@ -111,7 +111,7 @@ h6 span{
 .card-front, .card-back {
   width: 100%;
   height: 100%;
-  background-color: rgba(21, 30, 47,1);
+  background-color: #93B1A6;
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;
